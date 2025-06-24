@@ -7,15 +7,17 @@ jobs:
 
     steps:
       - name: Download ngrok
+        shell: powershell
         run: |
-          Invoke-WebRequest https://github.com/ngrok/ngrok/releases/download/3.10.1/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
-          Expand-Archive .\ngrok.zip -DestinationPath .
+          Invoke-WebRequest "https://github.com/ngrok/ngrok/releases/latest/download/ngrok-stable-windows-amd64.zip" -OutFile "ngrok.zip"
+          Expand-Archive "ngrok.zip" -DestinationPath "."
           .\ngrok.exe authtoken YOUR_AUTH_TOKEN
 
       - name: Enable RDP
+        shell: powershell
         run: |
           net user kamel123 MyStrong123 /add
           net localgroup administrators kamel123 /add
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name 'fDenyTSConnections' -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
-          .\ngrok.exe tcp 3389
+          Start-Process .\ngrok.exe -ArgumentList "tcp 3389"
