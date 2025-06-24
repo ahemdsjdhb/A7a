@@ -8,9 +8,9 @@ jobs:
     steps:
       - name: Download ngrok
         run: |
-          Invoke-WebRequest https://bin.ngrok.io/ngrok/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
-          Expand-Archive ngrok.zip
-          ./ngrok.exe authtoken YOUR_AUTH_TOKEN
+          Invoke-WebRequest https://github.com/ngrok/ngrok/releases/download/3.10.1/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
+          Expand-Archive .\ngrok.zip -DestinationPath .
+          .\ngrok.exe authtoken YOUR_AUTH_TOKEN
 
       - name: Enable RDP
         run: |
@@ -18,5 +18,4 @@ jobs:
           net localgroup administrators kamel123 /add
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name 'fDenyTSConnections' -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
-          ./ngrok.exe tcp 3389
-
+          .\ngrok.exe tcp 3389
